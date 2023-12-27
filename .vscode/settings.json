@@ -1,0 +1,12 @@
+{
+  "spellright.language": ["en", "sr-cyrl", "sr-latn"],
+  "spellright.documentTypes": ["markdown", "plaintext", "mdx"],
+  "spellright.parserByClass": {
+    "mdx": {
+      "parser": "markdown"
+    },
+    "dart": {
+      "parser": "plain"
+    }
+  }
+}
