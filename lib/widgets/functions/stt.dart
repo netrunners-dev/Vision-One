@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vision_one/global/globals.dart';
 
 class STT extends StatefulWidget {
   const STT(
@@ -30,7 +31,8 @@ class _STTState extends State<STT> {
       child: InkWell(
         onTap: () {
           widget.changeMode("stt");
-          if (!widget.isActive) return;
+
+          Globals.bluetooth.write("c02:10");
         },
         child: AnimatedContainer(
           width: 70,

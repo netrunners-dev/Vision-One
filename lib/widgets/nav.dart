@@ -19,7 +19,7 @@ class _NavbarState extends State<Navbar> {
 
   // Variables for AnimatedPositioned element
   double posTop = 13.4;
-  double posLeft = 17;
+  double posLeft = 20;
   bool initPosLeft = false;
 
   @override
@@ -28,7 +28,7 @@ class _NavbarState extends State<Navbar> {
 
     if (screenWidth > 400 && !initPosLeft) {
       setState(() {
-        posLeft = 17;
+        posLeft = 20;
         initPosLeft = true;
       });
     }
@@ -64,12 +64,12 @@ class _NavbarState extends State<Navbar> {
           ),
           Container(
             height: 81,
-            padding: const EdgeInsets.symmetric(horizontal: 27),
+            padding: const EdgeInsets.symmetric(horizontal: 35),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                GestureDetector(
+                InkWell(
                   key: homeKey,
                   onTap: () {
                     widget.onSwitchScreen("home");
@@ -87,7 +87,7 @@ class _NavbarState extends State<Navbar> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                GestureDetector(
+                InkWell(
                   key: userKey,
                   onTap: () {
                     widget.onSwitchScreen("user");
@@ -95,7 +95,7 @@ class _NavbarState extends State<Navbar> {
                         userKey.currentContext!.findRenderObject() as RenderBox;
                     Offset globalOffset = renderBox.localToGlobal(Offset.zero);
                     setState(() {
-                      posLeft = globalOffset.dx - 14;
+                      posLeft = globalOffset.dx - 14.5;
                     });
                   },
                   child: SvgPicture.asset(
@@ -105,7 +105,7 @@ class _NavbarState extends State<Navbar> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                GestureDetector(
+                InkWell(
                   key: settingsKey,
                   onTap: () {
                     widget.onSwitchScreen("settings");

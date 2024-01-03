@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 abstract class _BluetoothService {
@@ -75,10 +77,26 @@ class BluetoothService implements _BluetoothService {
       try {
         bluetoothConnection.output.add(utf8.encode(message));
       } catch (e) {
-        print("Error during write: $e");
+        Fluttertoast.showToast(
+          msg: "Error during write: $e",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16,
+        );
       }
     } else {
-      print("Connection is not established");
+      Fluttertoast.showToast(
+        msg: "Connection is not established",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16,
+      );
     }
   }
 

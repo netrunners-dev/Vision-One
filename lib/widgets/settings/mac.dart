@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:masked_text/masked_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vision_one/global/globals.dart';
 import 'package:vision_one/widgets/bluetooth_switch.dart';
 
 class MacAndBT extends StatefulWidget {
@@ -19,6 +21,23 @@ class MacAndBT extends StatefulWidget {
 }
 
 class _MacAndBTState extends State<MacAndBT> {
+  String initValue = '';
+
+  @override
+  void initState() {
+    _getMacAddress();
+    super.initState();
+  }
+
+  Future<void> _getMacAddress() async {
+    final SharedPreferences localStorage = await Globals.prefs;
+    final String macAddress = (localStorage.getString("mac") ?? "");
+
+    setState(() {
+      widget.macAddressController.text = macAddress;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(

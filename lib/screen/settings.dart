@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:vision_one/global/globals.dart';
 import 'package:vision_one/widgets/settings/info.dart';
@@ -32,7 +33,28 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
-  void applySettings() {
+  void isConnected() async {
+    bool isConnected = Globals.bluetooth.bluetoothConnection.isConnected;
+
+    setState(() {
+      isEnabled = isConnected;
+    });
+  }
+
+  @override
+  void initState() {
+    isConnected();
+    super.initState();
+  }
+
+  void applySettings() async {
+    final SharedPreferences localStorage = await Globals.prefs;
+    String mac = (localStorage.getString("mac") ?? "");
+
+    if (mac == '' || mac != _macAddressController.text) {
+      localStorage.setString('mac', _macAddressController.text);
+    }
+
     final RegExp _macRegex =
         RegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
     if (!_macRegex.hasMatch(_macAddressController.text)) {
@@ -51,20 +73,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (isEnabled) {
       Globals.bluetooth.connectTo(_macAddressController.text);
 
+      await Future.delayed(const Duration(seconds: 3));
       if (Globals.bluetooth.bluetoothConnection.isConnected) {
-        Fluttertoast.showToast(
-          msg: "Successfully connected",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          fontSize: 16,
-        );
-        Globals.bluetooth.write("c12:30");
-      } else {
-        Fluttertoast.showToast(
-          msg: "Failed to connect",
+        await Fluttertoast.showToast(
+          msg: "Success",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
@@ -76,6 +88,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     } else {
       if (Globals.bluetooth.bluetoothConnection.isConnected) {
         Globals.bluetooth.disconnect();
+
+        Fluttertoast.showToast(
+          msg: "Disconnected",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16,
+        );
       }
     }
   }
