@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vision_one/global/globals.dart';
-import 'package:vision_one/main.dart';
-
-import 'package:vision_one/services/bluetoothService.dart';
 
 class Status extends StatefulWidget {
   const Status({super.key});

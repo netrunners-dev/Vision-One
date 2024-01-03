@@ -28,7 +28,15 @@ class BluetoothService implements _BluetoothService {
         return devices;
       }
     } on PlatformException {
-      print("PlatformException");
+      Fluttertoast.showToast(
+        msg: "PlatformException",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16,
+      );
     }
 
     return [];
@@ -57,11 +65,36 @@ class BluetoothService implements _BluetoothService {
       }
     }
 
+    var isBluetoothEnabled = await flutterBluetoothSerial.isEnabled ?? false;
+
+    if (!isBluetoothEnabled) {
+      Fluttertoast.showToast(
+        msg: "Bluetooth is not enabled",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16,
+      );
+
+      return false;
+    }
+
     try {
       bluetoothConnection = await BluetoothConnection.toAddress(address);
       return bluetoothConnection.isConnected;
     } catch (e) {
-      print("Connection error: $e");
+      Fluttertoast.showToast(
+        msg: "Connection error due: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16,
+      );
+
       return false;
     }
   }

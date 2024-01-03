@@ -44,6 +44,7 @@ dependencies:
   shared_preferences: ^2.2.2
   provider: ^6.1.1
   fluttertoast: ^8.2.4
+  vosk_flutter: ^0.3.48
 
 dev_dependencies:
   flutter_test:
@@ -86,6 +87,8 @@ flutter:
     - assets/icons/x_icon.svg
     - assets/icons/github_icon.svg
     - assets/icons/mail_icon.svg
+    #Model
+    - assets/model/vosk-model.zip
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

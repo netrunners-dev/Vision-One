@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vision_one/global/globals.dart';
+import 'package:vosk_flutter/vosk_flutter.dart';
 
 class STT extends StatefulWidget {
   const STT(
@@ -22,6 +25,25 @@ class STT extends StatefulWidget {
 }
 
 class _STTState extends State<STT> {
+  final vosk = VoskFlutterPlugin.instance();
+  final _modelLoader = ModelLoader();
+  final sampleRate = 16000;
+  var _model;
+
+  @override
+  void initState() {
+    loadModel();
+    print(_model);
+
+    super.initState();
+  }
+
+  void loadModel() async {
+    await _modelLoader
+        .loadFromAssets('assets/model/vosk-model.zip')
+        .then((value) => _model = value);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -29,10 +51,23 @@ class _STTState extends State<STT> {
       left: (widget.screenWidth - (widget.screenWidth - 240)) / 2,
       right: (widget.screenWidth - (widget.screenWidth - 240)) / 2,
       child: InkWell(
-        onTap: () {
+        onTap: () async {
           widget.changeMode("stt");
 
-          Globals.bluetooth.write("c02:10");
+          // if (!Globals.bluetooth.bluetoothConnection.isConnected) return;
+          print('$_model ?????????????????????????????');
+
+          final recognizer = await vosk.createRecognizer(
+            model: _model,
+            sampleRate: sampleRate,
+          );
+
+          final speechService = await vosk.initSpeechService(recognizer);
+          speechService.onPartial().forEach((partial) => print(partial));
+          speechService.onResult().forEach((result) => print(result));
+          await speechService.start();
+
+          // Globals.bluetooth.write("c02:10");
         },
         child: AnimatedContainer(
           width: 70,

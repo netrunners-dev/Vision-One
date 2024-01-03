@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vision_one/main.dart';
 
 class BluetoothSwitch extends StatefulWidget {
   const BluetoothSwitch(
