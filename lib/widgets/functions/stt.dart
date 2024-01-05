@@ -1,9 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'package:vision_one/global/globals.dart';
-import 'package:vosk_flutter/vosk_flutter.dart';
 
 class STT extends StatefulWidget {
   const STT(
@@ -25,23 +23,42 @@ class STT extends StatefulWidget {
 }
 
 class _STTState extends State<STT> {
-  final vosk = VoskFlutterPlugin.instance();
-  final _modelLoader = ModelLoader();
-  final sampleRate = 16000;
-  var _model;
+  final SpeechToText _speechToText = SpeechToText();
+
+  bool _speechEnabled = false;
+  String _wordsSpoken = "";
 
   @override
   void initState() {
-    loadModel();
-    print(_model);
-
+    initSpeech();
     super.initState();
   }
 
-  void loadModel() async {
-    await _modelLoader
-        .loadFromAssets('assets/model/vosk-model.zip')
-        .then((value) => _model = value);
+  void initSpeech() async {
+    bool temp = await _speechToText.initialize();
+    setState(() {
+      _speechEnabled = temp;
+    });
+  }
+
+  void _startListening() async {
+    await _speechToText.listen(onResult: _onSpeechResult);
+    setState(() {});
+  }
+
+  void _stopListening() async {
+    await _speechToText.stop();
+    setState(() {});
+  }
+
+  void _onSpeechResult(result) {
+    setState(() {
+      _wordsSpoken = '${result.recognizedWords}';
+    });
+    if (Globals.bluetooth.bluetoothConnection.isConnected) {
+      Globals.bluetooth.write(_wordsSpoken);
+    }
+    print(_wordsSpoken);
   }
 
   @override
@@ -54,32 +71,23 @@ class _STTState extends State<STT> {
         onTap: () async {
           widget.changeMode("stt");
 
-          // if (!Globals.bluetooth.bluetoothConnection.isConnected) return;
-          print('$_model ?????????????????????????????');
-
-          final recognizer = await vosk.createRecognizer(
-            model: _model,
-            sampleRate: sampleRate,
-          );
-
-          final speechService = await vosk.initSpeechService(recognizer);
-          speechService.onPartial().forEach((partial) => print(partial));
-          speechService.onResult().forEach((result) => print(result));
-          await speechService.start();
-
-          // Globals.bluetooth.write("c02:10");
+          if (_speechToText.isListening) {
+            _stopListening();
+          } else {
+            _startListening();
+          }
         },
         child: AnimatedContainer(
           width: 70,
           height: 70,
-          margin: widget.isActive
+          margin: _speechToText.isListening
               ? const EdgeInsets.only(top: 2)
               : const EdgeInsets.all(0),
           duration: const Duration(milliseconds: 300),
           curve: Curves.fastOutSlowIn,
           padding: const EdgeInsets.fromLTRB(13, 15, 14, 12),
           decoration: BoxDecoration(
-            color: widget.isActive
+            color: _speechToText.isListening
                 ? const Color.fromARGB(255, 119, 239, 63)
                 : const Color.fromARGB(255, 239, 63, 64),
             boxShadow: [
