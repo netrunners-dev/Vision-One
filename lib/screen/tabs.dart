@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:vision_one/screen/home.dart';
 import 'package:vision_one/screen/settings.dart';
-import 'package:vision_one/screen/user.dart';
+import 'package:vision_one/screen/creators.dart';
 import 'package:vision_one/widgets/nav.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});
 
   @override
-  State<TabsScreen> createState() {
-    return _TabsScreenState();
-  }
+  State<TabsScreen> createState() => _TabsScreenState();
 }
 
 class _TabsScreenState extends State<TabsScreen> {
@@ -33,7 +31,7 @@ class _TabsScreenState extends State<TabsScreen> {
       });
     } else if (newScreen == "user") {
       setState(() {
-        currentScreen = const UserScreen();
+        currentScreen = const CreatorsScreen();
       });
     } else if (newScreen == "settings") {
       setState(() {
@@ -42,6 +40,7 @@ class _TabsScreenState extends State<TabsScreen> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Container(
         height: double.infinity,
         width: double.infinity,

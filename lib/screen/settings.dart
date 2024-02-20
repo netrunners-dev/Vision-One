@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:vision_one/global/globals.dart';
 import 'package:vision_one/widgets/settings/info.dart';
-import 'package:vision_one/widgets/settings/mac.dart';
+import 'package:vision_one/widgets/settings/mac_connect.dart';
 import 'package:vision_one/widgets/settings/macro.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -18,7 +18,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   Modes _activeMacro = Modes.aia;
-  TextEditingController _macAddressController = TextEditingController();
+  final TextEditingController _macAddressController = TextEditingController();
   bool isEnabled = false;
 
   void setActiveMacro(Modes macro) {
@@ -140,7 +140,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(
             height: 10,
           ),
-          MacAndBT(
+          MacConnect(
             isEnabled: isEnabled,
             macAddressController: _macAddressController,
             onChange: onChange,

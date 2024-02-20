@@ -7,9 +7,7 @@ class Navbar extends StatefulWidget {
   final Function(String newScreen) onSwitchScreen;
 
   @override
-  State<Navbar> createState() {
-    return _NavbarState();
-  }
+  State<Navbar> createState() => _NavbarState();
 }
 
 class _NavbarState extends State<Navbar> {
