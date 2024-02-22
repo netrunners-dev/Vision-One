@@ -22,15 +22,11 @@ class Transcribe extends StatefulWidget {
 }
 
 class _TranscribeState extends State<Transcribe> {
-  final SpeechToText _speechToText = SpeechToText();
-
   bool isConnected = false;
-  bool _speechEnabled = false;
-  String _wordsSpoken = "";
 
   @override
   void initState() {
-    initSpeech();
+    Globals.stt.initSpeech();
     isBtConnected();
     super.initState();
   }
@@ -38,28 +34,6 @@ class _TranscribeState extends State<Transcribe> {
   void isBtConnected() async {
     isConnected = Globals.bluetooth.bluetoothConnection.isConnected;
     setState(() {});
-  }
-
-  void initSpeech() async {
-    _speechEnabled = await _speechToText.initialize();
-    setState(() {});
-  }
-
-  void _startListening() async {
-    await _speechToText.listen(onResult: _onSpeechResult);
-    setState(() {});
-  }
-
-  void _stopListening() async {
-    await _speechToText.stop();
-    setState(() {});
-  }
-
-  void _onSpeechResult(result) {
-    setState(() {
-      _wordsSpoken = '${result.recognizedWords}';
-    });
-    Globals.bluetooth.write(_wordsSpoken);
   }
 
   @override
@@ -73,10 +47,10 @@ class _TranscribeState extends State<Transcribe> {
           widget.changeMode("stt");
 
           if (isConnected) {
-            if (_speechToText.isListening) {
-              _stopListening();
+            if (Globals.stt.speechEnabled) {
+              Globals.stt.stopListening();
             } else {
-              _startListening();
+              Globals.stt.startListening();
             }
           } else {
             Fluttertoast.showToast(
@@ -93,14 +67,14 @@ class _TranscribeState extends State<Transcribe> {
         child: AnimatedContainer(
           width: 70,
           height: 70,
-          margin: _speechToText.isListening
+          margin: Globals.stt.speechEnabled
               ? const EdgeInsets.only(top: 2)
               : const EdgeInsets.all(0),
           duration: const Duration(milliseconds: 300),
           curve: Curves.fastOutSlowIn,
           padding: const EdgeInsets.fromLTRB(13, 15, 14, 12),
           decoration: BoxDecoration(
-            color: _speechToText.isListening
+            color: Globals.stt.speechEnabled
                 ? const Color.fromARGB(255, 119, 239, 63)
                 : const Color.fromARGB(255, 239, 63, 64),
             boxShadow: [

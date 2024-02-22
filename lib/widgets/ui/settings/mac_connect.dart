@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:masked_text/masked_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vision_one/global/globals.dart';
-import 'package:vision_one/widgets/bluetooth_switch.dart';
+import 'package:vision_one/widgets/ui/settings/bluetooth_switch.dart';
 
 class MacConnect extends StatefulWidget {
   const MacConnect({

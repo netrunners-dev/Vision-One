@@ -34,12 +34,19 @@ class BottomPanel extends StatelessWidget {
           child: Image.asset("assets/images/full_glasses.png"),
         ),
 
-        // Connection Status
         Positioned(
-          top: screenHeight / 1.27,
-          right: screenWidth > 400 ? 60 : 55,
-          child: const ConnectionStatus(),
-        ),
+            top: screenHeight / 1.355,
+            right: 60,
+            child: Column(
+              children: [
+                BatteryReset(
+                    screenHeight: screenHeight, screenWidth: screenWidth),
+                const SizedBox(
+                  height: 10,
+                ),
+                const ConnectionStatus(),
+              ],
+            )),
 
         // Battery percentage
         Positioned(
@@ -47,8 +54,6 @@ class BottomPanel extends StatelessWidget {
           right: screenWidth > 400 ? 60 : 58,
           child: const BatteryPercentage(),
         ),
-
-        BatteryReset(screenHeight: screenHeight, screenWidth: screenWidth),
       ],
     );
   }

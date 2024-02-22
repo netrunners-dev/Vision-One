@@ -5,9 +5,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:vision_one/global/globals.dart';
-import 'package:vision_one/widgets/settings/info.dart';
-import 'package:vision_one/widgets/settings/mac_connect.dart';
-import 'package:vision_one/widgets/settings/macro.dart';
+import 'package:vision_one/widgets/ui/settings/info.dart';
+import 'package:vision_one/widgets/ui/settings/mac_connect.dart';
+import 'package:vision_one/widgets/ui/settings/macro.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
