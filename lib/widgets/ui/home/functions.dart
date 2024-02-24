@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:vision_one/providers/speech_to_text_provider.dart';
 import 'package:vision_one/widgets/functions/ai_assistant.dart';
 import 'package:vision_one/widgets/functions/music.dart';
 import 'package:vision_one/widgets/functions/speech_to_text.dart';
@@ -33,6 +35,9 @@ class _FuncitonsState extends State<Funcitons> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<STTProvider>().initSpeech();
+    bool isListening = context.watch<STTProvider>().speechToText.isListening;
+    bool speechEnabled = context.watch<STTProvider>().speechEnabled;
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -59,16 +64,20 @@ class _FuncitonsState extends State<Funcitons> {
           screenHeight: screenHeight,
         ),
         Transcribe(
-          isActive: activeModes["stt"]!,
+          isActive: activeModes["stt"]! && isListening,
           changeMode: onModeChange,
           screenWidth: screenWidth,
           screenHeight: screenHeight,
+          isListening: isListening,
+          speechEnabled: speechEnabled,
         ),
         AIAssistant(
-          isActive: activeModes["aia"]!,
+          isActive: activeModes["aia"]! && isListening,
           changeMode: onModeChange,
           screenWidth: screenWidth,
           screenHeight: screenHeight,
+          isListening: isListening,
+          speechEnabled: speechEnabled,
         ),
       ],
     );

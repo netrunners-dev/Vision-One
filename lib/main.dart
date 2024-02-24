@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:app_settings/app_settings.dart';
+import 'package:provider/provider.dart';
 import 'package:vision_one/global/globals.dart';
+import 'package:vision_one/providers/speech_to_text_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:dart_openai/dart_openai.dart';
 
 import 'package:vision_one/screen/tabs.dart';
 
@@ -19,6 +23,10 @@ void main() {
     if (!isEnabled) {
       AppSettings.openAppSettings(type: AppSettingsType.bluetooth);
     }
+
+    await dotenv.load(fileName: "lib/.env");
+    OpenAI.apiKey = dotenv.env["OPEN_AI_API_KEY"]!;
+
     runApp(const App());
   });
 }
@@ -38,15 +46,20 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(fontFamily: "Pixel").copyWith(
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: kColorScheme.primary,
-          selectionColor: kColorScheme.primary.withOpacity(.3),
-          selectionHandleColor: kColorScheme.primary,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => STTProvider()),
+      ],
+      child: MaterialApp(
+        theme: ThemeData(fontFamily: "Pixel").copyWith(
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: kColorScheme.primary,
+            selectionColor: kColorScheme.primary.withOpacity(.3),
+            selectionHandleColor: kColorScheme.primary,
+          ),
         ),
+        home: const TabsScreen(),
       ),
-      home: TabsScreen(),
     );
   }
 }

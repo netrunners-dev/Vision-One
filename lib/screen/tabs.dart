@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vision_one/screen/home.dart';
 import 'package:vision_one/screen/settings.dart';
 import 'package:vision_one/screen/creators.dart';
-import 'package:vision_one/widgets/nav.dart';
+import 'package:vision_one/widgets/ui/nav.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});

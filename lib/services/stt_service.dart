@@ -4,18 +4,13 @@ abstract class _STTService {
   void initSpeech();
   void startListening();
   void stopListening();
-
-  bool isConnected = false;
-  bool speechEnabled = false;
 }
 
 class STTService implements _STTService {
   final SpeechToText _speechToText = SpeechToText();
-  @override
-  bool isConnected = false;
-  @override
+
   bool speechEnabled = false;
-  String _wordsSpoken = "";
+  String wordsSpoken = "";
 
   @override
   void initSpeech() async {
@@ -25,6 +20,7 @@ class STTService implements _STTService {
   @override
   void startListening() async {
     await _speechToText.listen(onResult: _onSpeechResult);
+    speechEnabled = true;
   }
 
   @override
@@ -34,8 +30,8 @@ class STTService implements _STTService {
   }
 
   void _onSpeechResult(result) {
-    _wordsSpoken = '${result.recognizedWords}';
+    wordsSpoken = '${result.recognizedWords}';
     // Globals.bluetooth.write(_wordsSpoken);
-    print(_wordsSpoken);
+    // print(wordsSpoken);
   }
 }

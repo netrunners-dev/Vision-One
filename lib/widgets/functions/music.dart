@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:nowplaying/nowplaying.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:vision_one/global/globals.dart';
 
 class MusicMacro extends StatefulWidget {
   const MusicMacro({
@@ -22,6 +22,19 @@ class MusicMacro extends StatefulWidget {
 }
 
 class _MusicMacroState extends State<MusicMacro> {
+  bool isConnected = false;
+
+  @override
+  void initState() {
+    isBtConnected();
+    super.initState();
+  }
+
+  void isBtConnected() async {
+    isConnected = Globals.bluetooth.bluetoothConnection.isConnected;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -29,8 +42,20 @@ class _MusicMacroState extends State<MusicMacro> {
       left: 45,
       child: InkWell(
         onTap: () {
+          if (!isConnected) {
+            Fluttertoast.showToast(
+              msg: "You must connect to your glasses to use this feature.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+              fontSize: 16,
+            );
+            return;
+          }
+
           widget.changeMode("music");
-          if (!widget.isActive) return;
         },
         child: AnimatedContainer(
           width: 70,

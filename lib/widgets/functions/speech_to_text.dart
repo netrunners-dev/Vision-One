@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:speech_to_text/speech_to_text.dart';
+import 'package:provider/provider.dart';
 import 'package:vision_one/global/globals.dart';
+import 'package:vision_one/providers/speech_to_text_provider.dart';
 
 class Transcribe extends StatefulWidget {
-  const Transcribe(
-      {super.key,
-      required this.screenWidth,
-      required this.screenHeight,
-      required this.changeMode,
-      required this.isActive});
+  const Transcribe({
+    super.key,
+    required this.screenWidth,
+    required this.screenHeight,
+    required this.changeMode,
+    required this.isActive,
+    required this.isListening,
+    required this.speechEnabled,
+  });
 
   final double screenWidth;
   final double screenHeight;
   final Function(String) changeMode;
   final bool isActive;
+  final bool isListening;
+  final bool speechEnabled;
 
   @override
   State<Transcribe> createState() => _TranscribeState();
@@ -26,7 +32,6 @@ class _TranscribeState extends State<Transcribe> {
 
   @override
   void initState() {
-    Globals.stt.initSpeech();
     isBtConnected();
     super.initState();
   }
@@ -46,35 +51,23 @@ class _TranscribeState extends State<Transcribe> {
         onTap: () async {
           widget.changeMode("stt");
 
-          if (isConnected) {
-            if (Globals.stt.speechEnabled) {
-              Globals.stt.stopListening();
-            } else {
-              Globals.stt.startListening();
-            }
+          if (widget.speechEnabled) {
+            context.read<STTProvider>().stopListening();
           } else {
-            Fluttertoast.showToast(
-              msg: "You must connect to your glasses to use this feature.",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
-              fontSize: 16,
-            );
+            context.read<STTProvider>().startListening();
           }
         },
         child: AnimatedContainer(
           width: 70,
           height: 70,
-          margin: Globals.stt.speechEnabled
+          margin: widget.isActive
               ? const EdgeInsets.only(top: 2)
               : const EdgeInsets.all(0),
           duration: const Duration(milliseconds: 300),
           curve: Curves.fastOutSlowIn,
           padding: const EdgeInsets.fromLTRB(13, 15, 14, 12),
           decoration: BoxDecoration(
-            color: Globals.stt.speechEnabled
+            color: widget.isActive
                 ? const Color.fromARGB(255, 119, 239, 63)
                 : const Color.fromARGB(255, 239, 63, 64),
             boxShadow: [

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vision_one/widgets/ui/home/bottom_panel.dart';
 import 'package:vision_one/widgets/ui/home/functions.dart';
 import 'package:vision_one/widgets/ui/home/home_hero.dart';
-import 'package:vision_one/widgets/netrunners.dart';
+import 'package:vision_one/widgets/ui/home/netrunners.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
