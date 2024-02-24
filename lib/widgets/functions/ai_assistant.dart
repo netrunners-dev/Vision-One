@@ -64,8 +64,7 @@ class _AIAssistantState extends State<AIAssistant> {
   Widget build(BuildContext context) {
     String words = context.watch<STTProvider>().wordsSpoken;
 
-    if (words.isNotEmpty && !widget.isListening) {
-      print(words);
+    if (words.isNotEmpty && !widget.isListening && mounted) {
       aiQuery(words);
       context.read<STTProvider>().resetSpokenWords();
     }

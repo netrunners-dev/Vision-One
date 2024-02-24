@@ -30,6 +30,5 @@ class STTProvider extends ChangeNotifier {
 
   void resetSpokenWords() {
     wordsSpoken = "";
-    notifyListeners();
   }
 }
