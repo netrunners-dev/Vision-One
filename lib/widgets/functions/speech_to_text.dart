@@ -49,6 +49,19 @@ class _TranscribeState extends State<Transcribe> {
       right: (widget.screenWidth - (widget.screenWidth - 240)) / 2,
       child: InkWell(
         onTap: () async {
+          if (!isConnected) {
+            Fluttertoast.showToast(
+              msg: "You must connect to your glasses to use this feature.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+              fontSize: 16,
+            );
+            return;
+          }
+
           widget.changeMode("stt");
 
           if (widget.speechEnabled) {

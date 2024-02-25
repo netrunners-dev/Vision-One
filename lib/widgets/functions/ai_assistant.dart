@@ -65,7 +65,7 @@ class _AIAssistantState extends State<AIAssistant> {
     String words = context.watch<STTProvider>().wordsSpoken;
 
     if (words.isNotEmpty && !widget.isListening && mounted) {
-      aiQuery(words);
+      aiQuery("$words. Response must not be longer than 207 characters.");
       context.read<STTProvider>().resetSpokenWords();
     }
 
@@ -74,18 +74,18 @@ class _AIAssistantState extends State<AIAssistant> {
       right: 45,
       child: InkWell(
         onTap: () {
-          // if (!isConnected) {
-          //   Fluttertoast.showToast(
-          //     msg: "You must connect to your glasses to use this feature.",
-          //     toastLength: Toast.LENGTH_SHORT,
-          //     gravity: ToastGravity.CENTER,
-          //     timeInSecForIosWeb: 1,
-          //     backgroundColor: Colors.black,
-          //     textColor: Colors.white,
-          //     fontSize: 16,
-          //   );
-          //   return;
-          // }
+          if (!isConnected) {
+            Fluttertoast.showToast(
+              msg: "You must connect to your glasses to use this feature.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+              fontSize: 16,
+            );
+            return;
+          }
 
           widget.changeMode("aia");
 
