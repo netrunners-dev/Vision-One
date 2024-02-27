@@ -23,11 +23,11 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget currentScreen = HomeScreen();
+    Widget currentScreen = const HomeScreen();
 
     if (newScreen == "home") {
       setState(() {
-        currentScreen = HomeScreen();
+        currentScreen = const HomeScreen();
       });
     } else if (newScreen == "user") {
       setState(() {

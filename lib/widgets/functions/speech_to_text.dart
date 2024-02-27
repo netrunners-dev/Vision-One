@@ -63,6 +63,7 @@ class _TranscribeState extends State<Transcribe> {
           }
 
           widget.changeMode("stt");
+          context.read<STTProvider>().resetSpokenWords();
 
           if (widget.speechEnabled) {
             context.read<STTProvider>().stopListening();

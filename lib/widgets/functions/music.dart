@@ -1,21 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:vision_one/global/globals.dart';
 import 'package:nowplaying/nowplaying.dart';
+import 'package:vision_one/widgets/ui/music/music_button.dart';
 
 class MusicMacro extends StatefulWidget {
   const MusicMacro({
-    Key? key,
-    required this.screenWidth,
-    required this.screenHeight,
+    super.key,
     required this.changeMode,
     required this.isActive,
-  }) : super(key: key);
+  });
 
-  final double screenWidth;
-  final double screenHeight;
   final Function(String) changeMode;
   final bool isActive;
 
@@ -25,15 +22,18 @@ class MusicMacro extends StatefulWidget {
 
 class _MusicMacroState extends State<MusicMacro> {
   bool isConnected = false;
+  int counter = 1;
+  int prevCounter = 0;
+
   @override
   void initState() {
     super.initState();
+    customInterval();
     NowPlaying.instance.start();
     isBtConnected();
     NowPlaying.instance.isEnabled().then((bool isEnabled) async {
       if (!isEnabled) {
-        final shown = await NowPlaying.instance.requestPermissions();
-        print('MANAGED TO SHOW PERMS PAGE: $shown');
+        await NowPlaying.instance.requestPermissions();
       }
     });
   }
@@ -43,6 +43,13 @@ class _MusicMacroState extends State<MusicMacro> {
     setState(() {});
   }
 
+  void customInterval() {
+    Timer.periodic(const Duration(seconds: 3), (timer) {
+      counter += 1;
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamProvider<NowPlayingTrack>.value(
@@ -50,63 +57,32 @@ class _MusicMacroState extends State<MusicMacro> {
       value: NowPlaying.instance.stream,
       child: Consumer<NowPlayingTrack>(builder: (context, track, _) {
         // if (track == NowPlayingTrack.loading) return Container();
-        print(track.title);
 
-        return Positioned(
-          top: widget.screenHeight / 2.2,
-          left: 45,
-          child: InkWell(
-            onTap: () {
-              if (!isConnected) {
-                Fluttertoast.showToast(
-                  msg: "You must connect to your glasses to use this feature.",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.black,
-                  textColor: Colors.white,
-                  fontSize: 16,
-                );
-                return;
-              }
+        if (counter > prevCounter && widget.isActive) {
+          if (track.isStopped) {
+            return MusicButton(
+              changeMode: widget.changeMode,
+              isActive: widget.isActive,
+            );
+          }
 
-              widget.changeMode("music");
-            },
-            child: AnimatedContainer(
-              width: 70,
-              height: 70,
-              margin: widget.isActive
-                  ? const EdgeInsets.only(top: 2)
-                  : const EdgeInsets.all(0),
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.fastOutSlowIn,
-              padding: const EdgeInsets.fromLTRB(17, 19, 18, 14),
-              decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(.2),
-                    spreadRadius: 1,
-                    blurRadius: 2,
-                    offset: const Offset(1, 3),
-                  ),
-                ],
-                color: widget.isActive
-                    ? const Color.fromARGB(255, 119, 239, 63)
-                    : const Color.fromARGB(255, 239, 63, 64),
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(35),
-                  topRight: Radius.circular(35),
-                  bottomLeft: Radius.circular(25),
-                  bottomRight: Radius.circular(25),
-                ),
-              ),
-              child: SvgPicture.asset(
-                'assets/icons/music_icon.svg',
-                width: 30,
-                height: 30,
-              ),
-            ),
-          ),
+          String artist = track.artist ?? "";
+          String songName = track.title ?? "";
+
+          String progress =
+              track.progress.toString().split('.').first.substring(2);
+          String duration =
+              track.duration.toString().split('.').first.substring(2);
+
+          // print("m$artist|$songName|$progress/$duration");
+          Globals.bluetooth.write("m$artist|$songName|$progress/$duration");
+
+          prevCounter++;
+        }
+
+        return MusicButton(
+          changeMode: widget.changeMode,
+          isActive: widget.isActive,
         );
       }),
     );

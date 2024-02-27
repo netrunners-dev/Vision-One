@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:vision_one/global/globals.dart';
@@ -17,14 +18,15 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  Modes _activeMacro = Modes.aia;
+  String _activeMacro = '';
   final TextEditingController _macAddressController = TextEditingController();
   bool isEnabled = false;
 
-  void setActiveMacro(Modes macro) {
-    setState(() {
-      _activeMacro = macro;
-    });
+  void setActiveMacro(String macro) async {
+    final SharedPreferences localStorage = await Globals.prefs;
+    _activeMacro = macro;
+    localStorage.setString('macro', macro);
+    setState(() {});
   }
 
   void onChange(bool value) {
@@ -41,9 +43,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
   }
 
+  void initMacro() async {
+    final SharedPreferences localStorage = await Globals.prefs;
+    String macro = (localStorage.getString("macro") ?? "");
+
+    if (macro == '') {
+      localStorage.setString('macro', 'a');
+      _activeMacro = 'a';
+    }
+
+    setActiveMacro(macro);
+  }
+
   @override
   void initState() {
     isConnected();
+    initMacro();
     super.initState();
   }
 
@@ -55,9 +70,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       localStorage.setString('mac', _macAddressController.text);
     }
 
-    final RegExp _macRegex =
+    final RegExp macRegex =
         RegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
-    if (!_macRegex.hasMatch(_macAddressController.text)) {
+    if (!macRegex.hasMatch(_macAddressController.text)) {
       Fluttertoast.showToast(
         msg: "Mac address is not valid",
         toastLength: Toast.LENGTH_SHORT,
@@ -84,6 +99,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           textColor: Colors.white,
           fontSize: 16,
         );
+
+        DateTime now = DateTime.now();
+        String time = DateFormat('kk:mm').format(now);
+        String macro = (localStorage.getString("macro") ?? "a");
+
+        Globals.bluetooth.write("x$macro$time");
       }
     } else {
       if (Globals.bluetooth.bluetoothConnection.isConnected) {

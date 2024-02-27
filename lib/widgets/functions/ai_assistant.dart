@@ -57,17 +57,24 @@ class _AIAssistantState extends State<AIAssistant> {
       maxTokens: 500,
     );
 
-    print(chatCompletion.choices.first.message.content);
+    final response = chatCompletion.choices.first.message.content?[0].text;
+
+    if (response != null) {
+      return Globals.bluetooth.write(response);
+    }
+
+    Globals.bluetooth.write("No response 😢");
   }
 
   @override
   Widget build(BuildContext context) {
     String words = context.watch<STTProvider>().wordsSpoken;
 
-    if (words.isNotEmpty && !widget.isListening && mounted) {
-      aiQuery("$words. Response must not be longer than 207 characters.");
-      context.read<STTProvider>().resetSpokenWords();
-    }
+    // if (words.isNotEmpty && !widget.isListening && mounted) {
+    //   aiQuery("$words. Response must not be longer than 207 characters.");
+    //   context.read<STTProvider>().resetSpokenWords();
+    //   widget.changeMode('aia');
+    // }
 
     return Positioned(
       top: widget.screenHeight / 2.2,

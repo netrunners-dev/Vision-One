@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-final Uri _url = Uri.parse('https://www.instagram.com/netrunners_dev');
 
 class Netrunners extends StatelessWidget {
   const Netrunners(
@@ -10,12 +7,6 @@ class Netrunners extends StatelessWidget {
 
   final double screenWidth;
   final double screenHeight;
-
-  Future<void> _launchUrl() async {
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
