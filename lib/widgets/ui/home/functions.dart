@@ -24,7 +24,6 @@ class _FuncitonsState extends State<Funcitons> {
     'aia': false,
   };
   bool areAllModesDisabled = true;
-  String lastTime = "";
 
   @override
   void initState() {
@@ -33,26 +32,30 @@ class _FuncitonsState extends State<Funcitons> {
   }
 
   void onModeChange(String mode) {
-    setState(() {
-      activeModes.forEach((key, value) {
-        activeModes[key] = (key == mode) ? !value : false;
-      });
-
-      areAllModesDisabled =
-          activeModes.entries.every((element) => element.value == false);
+    activeModes.forEach((key, value) {
+      activeModes[key] = (key == mode) ? !value : false;
     });
+
+    areAllModesDisabled =
+        activeModes.entries.every((element) => element.value == false);
+
+    // setState(() {});
   }
 
   void clockMode() {
     Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (!areAllModesDisabled || !mounted) return;
+      if (!areAllModesDisabled) return;
 
       DateTime now = DateTime.now();
       String time = DateFormat('kk:mm').format(now);
 
-      lastTime = time;
       Globals.bluetooth.write("c$time");
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -84,7 +87,7 @@ class _FuncitonsState extends State<Funcitons> {
           changeMode: onModeChange,
         ),
         Transcribe(
-          isActive: activeModes["stt"]! && isListening,
+          isActive: activeModes["stt"]!,
           changeMode: onModeChange,
           screenWidth: screenWidth,
           screenHeight: screenHeight,
@@ -92,7 +95,7 @@ class _FuncitonsState extends State<Funcitons> {
           speechEnabled: speechEnabled,
         ),
         AIAssistant(
-          isActive: activeModes["aia"]! && isListening,
+          isActive: activeModes["aia"]!,
           changeMode: onModeChange,
           screenWidth: screenWidth,
           screenHeight: screenHeight,

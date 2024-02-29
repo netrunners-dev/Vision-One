@@ -21,7 +21,6 @@ class MusicMacro extends StatefulWidget {
 }
 
 class _MusicMacroState extends State<MusicMacro> {
-  bool isConnected = false;
   int counter = 1;
   int prevCounter = 0;
 
@@ -30,17 +29,11 @@ class _MusicMacroState extends State<MusicMacro> {
     super.initState();
     customInterval();
     NowPlaying.instance.start();
-    isBtConnected();
     NowPlaying.instance.isEnabled().then((bool isEnabled) async {
       if (!isEnabled) {
         await NowPlaying.instance.requestPermissions();
       }
     });
-  }
-
-  void isBtConnected() async {
-    isConnected = Globals.bluetooth.bluetoothConnection.isConnected;
-    setState(() {});
   }
 
   void customInterval() {
@@ -74,7 +67,6 @@ class _MusicMacroState extends State<MusicMacro> {
           String duration =
               track.duration.toString().split('.').first.substring(2);
 
-          // print("m$artist|$songName|$progress/$duration");
           Globals.bluetooth.write("m$artist|$songName|$progress/$duration");
 
           prevCounter++;

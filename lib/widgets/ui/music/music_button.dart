@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:vision_one/global/globals.dart';
 
 class MusicButton extends StatefulWidget {
   const MusicButton({
@@ -16,6 +18,19 @@ class MusicButton extends StatefulWidget {
 }
 
 class _MusicButtonState extends State<MusicButton> {
+  bool isConnected = false;
+
+  @override
+  void initState() {
+    isBtConnected();
+    super.initState();
+  }
+
+  void isBtConnected() async {
+    isConnected = Globals.bluetooth.bluetoothConnection.isConnected;
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -25,18 +40,18 @@ class _MusicButtonState extends State<MusicButton> {
       left: 45,
       child: InkWell(
         onTap: () {
-          // if (!isConnected) {
-          //   Fluttertoast.showToast(
-          //     msg: "You must connect to your glasses to use this feature.",
-          //     toastLength: Toast.LENGTH_SHORT,
-          //     gravity: ToastGravity.CENTER,
-          //     timeInSecForIosWeb: 1,
-          //     backgroundColor: Colors.black,
-          //     textColor: Colors.white,
-          //     fontSize: 16,
-          //   );
-          //   return;
-          // }
+          if (!isConnected) {
+            Fluttertoast.showToast(
+              msg: "You must connect to your glasses to use this feature.",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+              fontSize: 16,
+            );
+            return;
+          }
 
           widget.changeMode("music");
         },

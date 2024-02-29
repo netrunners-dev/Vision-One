@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -30,6 +32,7 @@ class AIAssistant extends StatefulWidget {
 
 class _AIAssistantState extends State<AIAssistant> {
   bool isConnected = false;
+  bool secondTime = false;
 
   @override
   void initState() {
@@ -60,7 +63,7 @@ class _AIAssistantState extends State<AIAssistant> {
     final response = chatCompletion.choices.first.message.content?[0].text;
 
     if (response != null) {
-      return Globals.bluetooth.write(response);
+      return Globals.bluetooth.write("at$response");
     }
 
     Globals.bluetooth.write("No response 😢");
@@ -70,37 +73,32 @@ class _AIAssistantState extends State<AIAssistant> {
   Widget build(BuildContext context) {
     String words = context.watch<STTProvider>().wordsSpoken;
 
-    // if (words.isNotEmpty && !widget.isListening && mounted) {
-    //   aiQuery("$words. Response must not be longer than 207 characters.");
-    //   context.read<STTProvider>().resetSpokenWords();
-    //   widget.changeMode('aia');
-    // }
-
     return Positioned(
       top: widget.screenHeight / 2.2,
       right: 45,
       child: InkWell(
         onTap: () {
-          if (!isConnected) {
-            Fluttertoast.showToast(
-              msg: "You must connect to your glasses to use this feature.",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
-              fontSize: 16,
-            );
-            return;
-          }
-
-          widget.changeMode("aia");
+          // if (!isConnected) {
+          //   Fluttertoast.showToast(
+          //     msg: "You must connect to your glasses to use this feature.",
+          //     toastLength: Toast.LENGTH_SHORT,
+          //     gravity: ToastGravity.CENTER,
+          //     timeInSecForIosWeb: 1,
+          //     backgroundColor: Colors.black,
+          //     textColor: Colors.white,
+          //     fontSize: 16,
+          //   );
+          //   return;
+          // }
 
           if (widget.speechEnabled) {
             context.read<STTProvider>().stopListening();
           } else {
             context.read<STTProvider>().startListening();
           }
+
+          secondTime = false;
+          widget.changeMode("aia");
         },
         child: AnimatedContainer(
           width: 70,
