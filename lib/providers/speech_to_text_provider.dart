@@ -12,8 +12,9 @@ class STTProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void startListening() async {
-    await speechToText.listen(onResult: _onSpeechResult);
+  void startListening(bool stt) async {
+    await speechToText.listen(
+        onResult: (result) => _onSpeechResult(result, stt));
     speechEnabled = true;
     notifyListeners();
   }
@@ -24,11 +25,16 @@ class STTProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _onSpeechResult(result) {
+  void _onSpeechResult(result, stt) {
     wordsSpoken = '${result.recognizedWords}';
   }
 
   void resetSpokenWords() {
     wordsSpoken = "";
+  }
+
+  void setSpeechEnabled(bool isEnabled) {
+    speechEnabled = isEnabled;
+    notifyListeners();
   }
 }

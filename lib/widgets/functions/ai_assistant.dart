@@ -94,7 +94,7 @@ class _AIAssistantState extends State<AIAssistant> {
           if (widget.speechEnabled) {
             context.read<STTProvider>().stopListening();
           } else {
-            context.read<STTProvider>().startListening();
+            context.read<STTProvider>().startListening(false);
           }
 
           secondTime = false;

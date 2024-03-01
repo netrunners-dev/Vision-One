@@ -61,7 +61,6 @@ class _MusicMacroState extends State<MusicMacro> {
 
           String artist = track.artist ?? "";
           String songName = track.title ?? "";
-
           String progress =
               track.progress.toString().split('.').first.substring(2);
           String duration =

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -29,10 +31,14 @@ class Transcribe extends StatefulWidget {
 
 class _TranscribeState extends State<Transcribe> {
   bool isConnected = false;
+  bool speechWasEnabled = false;
+  int counter = 1;
+  int prevCounter = 0;
 
   @override
   void initState() {
     isBtConnected();
+    customInterval();
     super.initState();
   }
 
@@ -41,35 +47,63 @@ class _TranscribeState extends State<Transcribe> {
     setState(() {});
   }
 
+  void customInterval() {
+    Timer.periodic(const Duration(milliseconds: 1500), (timer) {
+      counter += 1;
+      setState(() {});
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    String words = context.read<STTProvider>().wordsSpoken;
+
+    Future.delayed(Duration.zero, () {
+      if (widget.isActive && counter > prevCounter && widget.isListening) {
+        print(words);
+        Globals.bluetooth.write("s$words");
+        prevCounter++;
+        speechWasEnabled = true;
+      }
+
+      if (widget.isActive && !widget.isListening && speechWasEnabled) {
+        Timer(const Duration(seconds: 3), () {
+          widget.changeMode('stt');
+        });
+        speechWasEnabled = false;
+        context.read<STTProvider>().resetSpokenWords();
+        context.read<STTProvider>().setSpeechEnabled(false);
+      }
+    });
+
     return Positioned(
       top: widget.screenHeight / 2.2,
       left: (widget.screenWidth - (widget.screenWidth - 240)) / 2,
       right: (widget.screenWidth - (widget.screenWidth - 240)) / 2,
       child: InkWell(
         onTap: () async {
-          if (!isConnected) {
-            Fluttertoast.showToast(
-              msg: "You must connect to your glasses to use this feature.",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
-              fontSize: 16,
-            );
-            return;
-          }
+          // if (!isConnected) {
+          //   Fluttertoast.showToast(
+          //     msg: "You must connect to your glasses to use this feature.",
+          //     toastLength: Toast.LENGTH_SHORT,
+          //     gravity: ToastGravity.CENTER,
+          //     timeInSecForIosWeb: 1,
+          //     backgroundColor: Colors.black,
+          //     textColor: Colors.white,
+          //     fontSize: 16,
+          //   );
+          //   return;
+          // }
 
-          widget.changeMode("stt");
           context.read<STTProvider>().resetSpokenWords();
 
           if (widget.speechEnabled) {
             context.read<STTProvider>().stopListening();
           } else {
-            context.read<STTProvider>().startListening();
+            context.read<STTProvider>().startListening(true);
           }
+
+          widget.changeMode("stt");
         },
         child: AnimatedContainer(
           width: 70,

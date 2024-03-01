@@ -39,7 +39,7 @@ class _FuncitonsState extends State<Funcitons> {
     areAllModesDisabled =
         activeModes.entries.every((element) => element.value == false);
 
-    // setState(() {});
+    setState(() {});
   }
 
   void clockMode() {
