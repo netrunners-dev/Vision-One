@@ -27,20 +27,24 @@ class _BatteryResetState extends State<BatteryReset> {
 
   void updateBatteryPercentage() {
     Globals.bluetooth.write("b");
-    Globals.bluetooth.bluetoothConnection.input?.listen((Uint8List data) {
-      String dataStr = ascii.decode(data);
-      message += dataStr;
-      if (dataStr.contains('\n')) {
-        if (!regex.hasMatch(message)) {
-          message = '';
-          return;
-        }
+    try {
+      Globals.bluetooth.bluetoothConnection.input?.listen((Uint8List data) {
+        String dataStr = ascii.decode(data);
+        message += dataStr;
+        if (dataStr.contains('\n')) {
+          if (!regex.hasMatch(message)) {
+            message = '';
+            return;
+          }
 
-        String percentage = message.substring(1);
-        widget.setBatteryPercentage(int.parse(percentage).toInt());
-        message = '';
-      }
-    });
+          String percentage = message.substring(1);
+          widget.setBatteryPercentage(int.parse(percentage).toInt());
+          message = '';
+        }
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override

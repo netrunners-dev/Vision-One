@@ -53,7 +53,7 @@ class _MusicButtonState extends State<MusicButton> {
             return;
           }
 
-          widget.changeMode("music");
+          widget.changeMode("m");
         },
         child: AnimatedContainer(
           width: 70,

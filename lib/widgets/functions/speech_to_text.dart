@@ -16,24 +16,34 @@ class Transcribe extends StatefulWidget {
     required this.isActive,
     required this.isListening,
     required this.speechEnabled,
+    required this.macro,
+    required this.macroClicked,
+    required this.setMacroClicked,
   });
 
   final double screenWidth;
   final double screenHeight;
+
   final Function(String) changeMode;
+
   final bool isActive;
   final bool isListening;
   final bool speechEnabled;
+
+  final bool macro;
+  final bool macroClicked;
+  final Function(bool) setMacroClicked;
 
   @override
   State<Transcribe> createState() => _TranscribeState();
 }
 
 class _TranscribeState extends State<Transcribe> {
-  bool isConnected = false;
-  bool speechWasEnabled = false;
   int counter = 1;
   int prevCounter = 0;
+
+  bool isConnected = false;
+  bool speechWasEnabled = false;
 
   @override
   void initState() {
@@ -59,8 +69,12 @@ class _TranscribeState extends State<Transcribe> {
     String words = context.read<STTProvider>().wordsSpoken;
 
     Future.delayed(Duration.zero, () {
+      if (widget.macro && !widget.macroClicked && widget.isActive) {
+        turnOnSpeech();
+        widget.setMacroClicked(true);
+      }
+
       if (widget.isActive && counter > prevCounter && widget.isListening) {
-        print(words);
         Globals.bluetooth.write("s$words");
         prevCounter++;
         speechWasEnabled = true;
@@ -68,7 +82,7 @@ class _TranscribeState extends State<Transcribe> {
 
       if (widget.isActive && !widget.isListening && speechWasEnabled) {
         Timer(const Duration(seconds: 3), () {
-          widget.changeMode('stt');
+          widget.changeMode("s");
         });
         speechWasEnabled = false;
         context.read<STTProvider>().resetSpokenWords();
@@ -81,30 +95,7 @@ class _TranscribeState extends State<Transcribe> {
       left: (widget.screenWidth - (widget.screenWidth - 240)) / 2,
       right: (widget.screenWidth - (widget.screenWidth - 240)) / 2,
       child: InkWell(
-        onTap: () async {
-          // if (!isConnected) {
-          //   Fluttertoast.showToast(
-          //     msg: "You must connect to your glasses to use this feature.",
-          //     toastLength: Toast.LENGTH_SHORT,
-          //     gravity: ToastGravity.CENTER,
-          //     timeInSecForIosWeb: 1,
-          //     backgroundColor: Colors.black,
-          //     textColor: Colors.white,
-          //     fontSize: 16,
-          //   );
-          //   return;
-          // }
-
-          context.read<STTProvider>().resetSpokenWords();
-
-          if (widget.speechEnabled) {
-            context.read<STTProvider>().stopListening();
-          } else {
-            context.read<STTProvider>().startListening(true);
-          }
-
-          widget.changeMode("stt");
-        },
+        onTap: turnOnSpeech,
         child: AnimatedContainer(
           width: 70,
           height: 70,
@@ -156,5 +147,31 @@ class _TranscribeState extends State<Transcribe> {
         ),
       ),
     );
+  }
+
+  void turnOnSpeech() {
+    if (!isConnected) {
+      Fluttertoast.showToast(
+        msg: "You must connect to your glasses to use this feature.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16,
+      );
+      return;
+    }
+
+    speechWasEnabled = false;
+    context.read<STTProvider>().resetSpokenWords();
+
+    if (widget.speechEnabled) {
+      context.read<STTProvider>().stopListening();
+    } else {
+      context.read<STTProvider>().startListening(true);
+    }
+
+    widget.changeMode("s");
   }
 }

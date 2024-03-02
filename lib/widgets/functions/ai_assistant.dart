@@ -10,21 +10,30 @@ import 'package:vision_one/providers/speech_to_text_provider.dart';
 
 class AIAssistant extends StatefulWidget {
   const AIAssistant({
-    Key? key,
+    super.key,
     required this.screenWidth,
     required this.screenHeight,
     required this.changeMode,
     required this.isActive,
     required this.isListening,
     required this.speechEnabled,
-  }) : super(key: key);
+    required this.macro,
+    required this.macroClicked,
+    required this.setMacroClicked,
+  });
 
   final double screenWidth;
   final double screenHeight;
+
   final Function(String) changeMode;
+
   final bool isActive;
   final bool isListening;
   final bool speechEnabled;
+
+  final bool macro;
+  final bool macroClicked;
+  final Function(bool) setMacroClicked;
 
   @override
   State<AIAssistant> createState() => _AIAssistantState();
@@ -32,7 +41,7 @@ class AIAssistant extends StatefulWidget {
 
 class _AIAssistantState extends State<AIAssistant> {
   bool isConnected = false;
-  bool secondTime = false;
+  bool speechWasEnabled = false;
 
   @override
   void initState() {
@@ -73,33 +82,36 @@ class _AIAssistantState extends State<AIAssistant> {
   Widget build(BuildContext context) {
     String words = context.watch<STTProvider>().wordsSpoken;
 
+    Future.delayed(Duration.zero, () {
+      if (widget.macro && !widget.macroClicked && widget.isActive) {
+        turnOnAI();
+        widget.setMacroClicked(true);
+      }
+
+      if (widget.isActive && widget.isListening) {
+        speechWasEnabled = true;
+      }
+
+      if (widget.isActive && !widget.isListening && speechWasEnabled) {
+        Globals.bluetooth.write("aw");
+        Timer(const Duration(seconds: 1), () {
+          aiQuery(words);
+        });
+
+        context.read<STTProvider>().resetSpokenWords();
+        context.read<STTProvider>().setSpeechEnabled(false);
+        speechWasEnabled = false;
+        Timer(const Duration(seconds: 7), () {
+          widget.changeMode("a");
+        });
+      }
+    });
+
     return Positioned(
       top: widget.screenHeight / 2.2,
       right: 45,
       child: InkWell(
-        onTap: () {
-          // if (!isConnected) {
-          //   Fluttertoast.showToast(
-          //     msg: "You must connect to your glasses to use this feature.",
-          //     toastLength: Toast.LENGTH_SHORT,
-          //     gravity: ToastGravity.CENTER,
-          //     timeInSecForIosWeb: 1,
-          //     backgroundColor: Colors.black,
-          //     textColor: Colors.white,
-          //     fontSize: 16,
-          //   );
-          //   return;
-          // }
-
-          if (widget.speechEnabled) {
-            context.read<STTProvider>().stopListening();
-          } else {
-            context.read<STTProvider>().startListening(false);
-          }
-
-          secondTime = false;
-          widget.changeMode("aia");
-        },
+        onTap: turnOnAI,
         child: AnimatedContainer(
           width: 70,
           height: 70,
@@ -136,5 +148,31 @@ class _AIAssistantState extends State<AIAssistant> {
         ),
       ),
     );
+  }
+
+  void turnOnAI() {
+    if (!isConnected) {
+      Fluttertoast.showToast(
+        msg: "You must connect to your glasses to use this feature.",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.black,
+        textColor: Colors.white,
+        fontSize: 16,
+      );
+      return;
+    }
+
+    speechWasEnabled = false;
+
+    if (widget.speechEnabled) {
+      context.read<STTProvider>().stopListening();
+    } else {
+      context.read<STTProvider>().startListening(false);
+      Globals.bluetooth.write("al");
+    }
+
+    widget.changeMode("a");
   }
 }

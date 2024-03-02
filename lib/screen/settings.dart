@@ -21,6 +21,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _activeMacro = '';
   final TextEditingController _macAddressController = TextEditingController();
   bool isEnabled = false;
+  bool isBTConnected = false;
 
   void setActiveMacro(String macro) async {
     final SharedPreferences localStorage = await Globals.prefs;
@@ -36,10 +37,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void isConnected() async {
-    bool isConnected = Globals.bluetooth.bluetoothConnection.isConnected;
+    isBTConnected = Globals.bluetooth.bluetoothConnection.isConnected;
 
     setState(() {
-      isEnabled = isConnected;
+      isEnabled = isBTConnected;
     });
   }
 
@@ -86,6 +87,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
 
     if (isEnabled) {
+      if (isBTConnected) {
+        DateTime now = DateTime.now();
+        String time = DateFormat('kk:mm').format(now);
+        String macro = (localStorage.getString("macro") ?? "a");
+
+        print("x$macro$time");
+        Globals.bluetooth.write("x$macro$time");
+        return;
+      }
+
       Globals.bluetooth.connectTo(_macAddressController.text);
 
       await Future.delayed(const Duration(seconds: 3));
@@ -104,6 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         String time = DateFormat('kk:mm').format(now);
         String macro = (localStorage.getString("macro") ?? "a");
 
+        print("x$macro$time");
         Globals.bluetooth.write("x$macro$time");
       }
     } else {

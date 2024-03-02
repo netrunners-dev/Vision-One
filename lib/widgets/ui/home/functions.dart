@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,16 +21,60 @@ class Funcitons extends StatefulWidget {
 class _FuncitonsState extends State<Funcitons> {
   // Variables
   Map<String, bool> activeModes = {
-    "music": false,
-    'stt': false,
-    'aia': false,
+    "m": false,
+    "s": false,
+    "a": false,
   };
+  String message = "";
+
   bool areAllModesDisabled = true;
+  bool isConnected = false;
+  bool macro = false;
+  bool macroClicked = false;
 
   @override
   void initState() {
+    isBtConnected();
+    listenForMacro();
     clockMode();
     super.initState();
+  }
+
+  void isBtConnected() async {
+    isConnected = Globals.bluetooth.bluetoothConnection.isConnected;
+    setState(() {});
+  }
+
+  void setMacroClicked(bool clicked) {
+    macroClicked = clicked;
+    setState(() {});
+  }
+
+  void listenForMacro() {
+    if (isConnected) {
+      try {
+        Globals.bluetooth.bluetoothConnection.input?.listen((Uint8List data) {
+          String dataStr = ascii.decode(data);
+          message += dataStr;
+          if (dataStr.contains('\n')) {
+            String trimmedMessage = message.trim();
+            print(trimmedMessage);
+            if (trimmedMessage == 'm' ||
+                trimmedMessage == 'a' ||
+                trimmedMessage == 's') {
+              onModeChange(trimmedMessage);
+              macroClicked = false;
+              macro = !macro;
+              setState(() {});
+            }
+
+            message = '';
+          }
+        });
+      } catch (e) {
+        print(e);
+      }
+    }
   }
 
   void onModeChange(String mode) {
@@ -51,11 +97,6 @@ class _FuncitonsState extends State<Funcitons> {
 
       Globals.bluetooth.write("c$time");
     });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -83,24 +124,30 @@ class _FuncitonsState extends State<Funcitons> {
           ),
         ),
         MusicMacro(
-          isActive: activeModes["music"]!,
+          isActive: activeModes["m"]!,
           changeMode: onModeChange,
         ),
         Transcribe(
-          isActive: activeModes["stt"]!,
+          isActive: activeModes["s"]!,
           changeMode: onModeChange,
           screenWidth: screenWidth,
           screenHeight: screenHeight,
           isListening: isListening,
           speechEnabled: speechEnabled,
+          macro: macro,
+          macroClicked: macroClicked,
+          setMacroClicked: setMacroClicked,
         ),
         AIAssistant(
-          isActive: activeModes["aia"]!,
+          isActive: activeModes["a"]!,
           changeMode: onModeChange,
           screenWidth: screenWidth,
           screenHeight: screenHeight,
           isListening: isListening,
           speechEnabled: speechEnabled,
+          macro: macro,
+          macroClicked: macroClicked,
+          setMacroClicked: setMacroClicked,
         ),
       ],
     );
