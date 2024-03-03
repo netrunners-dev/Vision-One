@@ -21,32 +21,35 @@ class Funcitons extends StatefulWidget {
 class _FuncitonsState extends State<Funcitons> {
   // Variables
   Map<String, bool> activeModes = {
-    "m": false,
-    "s": false,
     "a": false,
+    "s": false,
+    "m": false,
   };
   String message = "";
+  String macro = "";
 
   bool areAllModesDisabled = true;
   bool isConnected = false;
-  bool macro = false;
-  bool macroClicked = false;
+  bool isMacroClicked = false;
+  bool wasSent = false;
 
   @override
   void initState() {
     isBtConnected();
     listenForMacro();
     clockMode();
+    resetSentTimer();
     super.initState();
+  }
+
+  void resetSentTimer() {
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (wasSent) setWasSent(false);
+    });
   }
 
   void isBtConnected() async {
     isConnected = Globals.bluetooth.bluetoothConnection.isConnected;
-    setState(() {});
-  }
-
-  void setMacroClicked(bool clicked) {
-    macroClicked = clicked;
     setState(() {});
   }
 
@@ -58,14 +61,20 @@ class _FuncitonsState extends State<Funcitons> {
           message += dataStr;
           if (dataStr.contains('\n')) {
             String trimmedMessage = message.trim();
-            print(trimmedMessage);
-            if (trimmedMessage == 'm' ||
-                trimmedMessage == 'a' ||
-                trimmedMessage == 's') {
-              onModeChange(trimmedMessage);
-              macroClicked = false;
-              macro = !macro;
-              setState(() {});
+            if (trimmedMessage == "a" && !wasSent) {
+              onModeChange("a");
+              setIsMacroClicked(false);
+              setWasSent(true);
+            }
+
+            if (trimmedMessage == "s" && !wasSent) {
+              onModeChange("s");
+              setIsMacroClicked(false);
+              setWasSent(true);
+            }
+
+            if (trimmedMessage == "m") {
+              onModeChange('m');
             }
 
             message = '';
@@ -75,6 +84,16 @@ class _FuncitonsState extends State<Funcitons> {
         print(e);
       }
     }
+  }
+
+  void setIsMacroClicked(bool clicked) {
+    isMacroClicked = clicked;
+    setState(() {});
+  }
+
+  void setWasSent(bool sent) {
+    wasSent = sent;
+    setState(() {});
   }
 
   void onModeChange(String mode) {
@@ -134,9 +153,8 @@ class _FuncitonsState extends State<Funcitons> {
           screenHeight: screenHeight,
           isListening: isListening,
           speechEnabled: speechEnabled,
-          macro: macro,
-          macroClicked: macroClicked,
-          setMacroClicked: setMacroClicked,
+          isMacroClicked: isMacroClicked,
+          setIsMacroClicked: setIsMacroClicked,
         ),
         AIAssistant(
           isActive: activeModes["a"]!,
@@ -145,9 +163,8 @@ class _FuncitonsState extends State<Funcitons> {
           screenHeight: screenHeight,
           isListening: isListening,
           speechEnabled: speechEnabled,
-          macro: macro,
-          macroClicked: macroClicked,
-          setMacroClicked: setMacroClicked,
+          isMacroClicked: isMacroClicked,
+          setIsMacroClicked: setIsMacroClicked,
         ),
       ],
     );

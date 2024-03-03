@@ -17,9 +17,8 @@ class AIAssistant extends StatefulWidget {
     required this.isActive,
     required this.isListening,
     required this.speechEnabled,
-    required this.macro,
-    required this.macroClicked,
-    required this.setMacroClicked,
+    required this.isMacroClicked,
+    required this.setIsMacroClicked,
   });
 
   final double screenWidth;
@@ -31,9 +30,8 @@ class AIAssistant extends StatefulWidget {
   final bool isListening;
   final bool speechEnabled;
 
-  final bool macro;
-  final bool macroClicked;
-  final Function(bool) setMacroClicked;
+  final bool isMacroClicked;
+  final Function(bool) setIsMacroClicked;
 
   @override
   State<AIAssistant> createState() => _AIAssistantState();
@@ -83,9 +81,9 @@ class _AIAssistantState extends State<AIAssistant> {
     String words = context.watch<STTProvider>().wordsSpoken;
 
     Future.delayed(Duration.zero, () {
-      if (widget.macro && !widget.macroClicked && widget.isActive) {
-        turnOnAI();
-        widget.setMacroClicked(true);
+      if (widget.isActive && !widget.isMacroClicked) {
+        turnOnAI(true);
+        widget.setIsMacroClicked(true);
       }
 
       if (widget.isActive && widget.isListening) {
@@ -95,7 +93,7 @@ class _AIAssistantState extends State<AIAssistant> {
       if (widget.isActive && !widget.isListening && speechWasEnabled) {
         Globals.bluetooth.write("aw");
         Timer(const Duration(seconds: 1), () {
-          aiQuery(words);
+          aiQuery("$words, It must be under 208 characters");
         });
 
         context.read<STTProvider>().resetSpokenWords();
@@ -111,7 +109,7 @@ class _AIAssistantState extends State<AIAssistant> {
       top: widget.screenHeight / 2.2,
       right: 45,
       child: InkWell(
-        onTap: turnOnAI,
+        onTap: () => turnOnAI(false),
         child: AnimatedContainer(
           width: 70,
           height: 70,
@@ -150,7 +148,7 @@ class _AIAssistantState extends State<AIAssistant> {
     );
   }
 
-  void turnOnAI() {
+  void turnOnAI(bool macro) {
     if (!isConnected) {
       Fluttertoast.showToast(
         msg: "You must connect to your glasses to use this feature.",
@@ -164,7 +162,7 @@ class _AIAssistantState extends State<AIAssistant> {
       return;
     }
 
-    speechWasEnabled = false;
+    context.read<STTProvider>().resetSpokenWords();
 
     if (widget.speechEnabled) {
       context.read<STTProvider>().stopListening();
@@ -173,6 +171,8 @@ class _AIAssistantState extends State<AIAssistant> {
       Globals.bluetooth.write("al");
     }
 
-    widget.changeMode("a");
+    if (!macro) {
+      widget.changeMode("a");
+    }
   }
 }

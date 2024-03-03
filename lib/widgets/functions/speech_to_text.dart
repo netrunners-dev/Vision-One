@@ -16,9 +16,8 @@ class Transcribe extends StatefulWidget {
     required this.isActive,
     required this.isListening,
     required this.speechEnabled,
-    required this.macro,
-    required this.macroClicked,
-    required this.setMacroClicked,
+    required this.isMacroClicked,
+    required this.setIsMacroClicked,
   });
 
   final double screenWidth;
@@ -30,9 +29,8 @@ class Transcribe extends StatefulWidget {
   final bool isListening;
   final bool speechEnabled;
 
-  final bool macro;
-  final bool macroClicked;
-  final Function(bool) setMacroClicked;
+  final bool isMacroClicked;
+  final Function(bool) setIsMacroClicked;
 
   @override
   State<Transcribe> createState() => _TranscribeState();
@@ -69,9 +67,9 @@ class _TranscribeState extends State<Transcribe> {
     String words = context.read<STTProvider>().wordsSpoken;
 
     Future.delayed(Duration.zero, () {
-      if (widget.macro && !widget.macroClicked && widget.isActive) {
-        turnOnSpeech();
-        widget.setMacroClicked(true);
+      if (widget.isActive && !widget.isMacroClicked) {
+        turnOnSpeech(true);
+        widget.setIsMacroClicked(true);
       }
 
       if (widget.isActive && counter > prevCounter && widget.isListening) {
@@ -81,6 +79,7 @@ class _TranscribeState extends State<Transcribe> {
       }
 
       if (widget.isActive && !widget.isListening && speechWasEnabled) {
+        Globals.bluetooth.write("s$words");
         Timer(const Duration(seconds: 3), () {
           widget.changeMode("s");
         });
@@ -95,7 +94,7 @@ class _TranscribeState extends State<Transcribe> {
       left: (widget.screenWidth - (widget.screenWidth - 240)) / 2,
       right: (widget.screenWidth - (widget.screenWidth - 240)) / 2,
       child: InkWell(
-        onTap: turnOnSpeech,
+        onTap: () => turnOnSpeech(false),
         child: AnimatedContainer(
           width: 70,
           height: 70,
@@ -149,7 +148,7 @@ class _TranscribeState extends State<Transcribe> {
     );
   }
 
-  void turnOnSpeech() {
+  void turnOnSpeech(bool macro) {
     if (!isConnected) {
       Fluttertoast.showToast(
         msg: "You must connect to your glasses to use this feature.",
@@ -172,6 +171,8 @@ class _TranscribeState extends State<Transcribe> {
       context.read<STTProvider>().startListening(true);
     }
 
-    widget.changeMode("s");
+    if (!macro) {
+      widget.changeMode("s");
+    }
   }
 }
