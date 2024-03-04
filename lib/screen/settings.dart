@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:vision_one/global/globals.dart';
+import 'package:vision_one/utils/utility.dart';
 import 'package:vision_one/widgets/ui/settings/info.dart';
 import 'package:vision_one/widgets/ui/settings/mac_connect.dart';
 import 'package:vision_one/widgets/ui/settings/macro.dart';
@@ -74,63 +75,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
     final RegExp macRegex =
         RegExp(r'^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$');
     if (!macRegex.hasMatch(_macAddressController.text)) {
-      Fluttertoast.showToast(
-        msg: "Mac address is not valid",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16,
-      );
+      Utility.showToast("Mac address is not valid");
       return;
     }
 
     if (isEnabled) {
-      if (isBTConnected) {
-        DateTime now = DateTime.now();
-        String time = DateFormat('kk:mm').format(now);
-        String macro = (localStorage.getString("macro") ?? "a");
+      DateTime now = DateTime.now();
+      String time = DateFormat('kk:mm').format(now);
+      String macro = (localStorage.getString("macro") ?? "a");
 
-        print("x$macro$time");
+      if (isBTConnected) {
         Globals.bluetooth.write("x$macro$time");
+        Utility.showToast("Successfully changed settings ⚙️");
         return;
       }
 
       Globals.bluetooth.connectTo(_macAddressController.text);
-
       await Future.delayed(const Duration(seconds: 3));
+
       if (Globals.bluetooth.bluetoothConnection.isConnected) {
-        await Fluttertoast.showToast(
-          msg: "Success",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          fontSize: 16,
-        );
-
-        DateTime now = DateTime.now();
-        String time = DateFormat('kk:mm').format(now);
-        String macro = (localStorage.getString("macro") ?? "a");
-
-        print("x$macro$time");
         Globals.bluetooth.write("x$macro$time");
+        isBTConnected = true;
+        setState(() {});
+        Utility.showToast("Successfully connected ⚡");
       }
     } else {
       if (Globals.bluetooth.bluetoothConnection.isConnected) {
         Globals.bluetooth.disconnect();
-
-        Fluttertoast.showToast(
-          msg: "Disconnected",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          fontSize: 16,
-        );
+        isBTConnected = false;
+        setState(() {});
+        Utility.showToast("Disconnected ⚡");
       }
     }
   }
