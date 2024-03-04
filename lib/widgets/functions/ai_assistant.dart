@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:vision_one/global/globals.dart';
 import 'package:vision_one/providers/speech_to_text_provider.dart';
+import 'package:vision_one/utils/utility.dart';
 
 class AIAssistant extends StatefulWidget {
   const AIAssistant({
@@ -150,15 +150,8 @@ class _AIAssistantState extends State<AIAssistant> {
 
   void turnOnAI(bool macro) {
     if (!isConnected) {
-      Fluttertoast.showToast(
-        msg: "You must connect to your glasses to use this feature.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16,
-      );
+      Utility.showToast(
+          "You must connect to your glasses to use this feature.");
       return;
     }
 

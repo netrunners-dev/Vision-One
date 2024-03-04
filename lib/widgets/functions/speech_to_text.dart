@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:vision_one/global/globals.dart';
 import 'package:vision_one/providers/speech_to_text_provider.dart';
+import 'package:vision_one/utils/utility.dart';
 
 class Transcribe extends StatefulWidget {
   const Transcribe({
@@ -56,7 +56,7 @@ class _TranscribeState extends State<Transcribe> {
   }
 
   void customInterval() {
-    Timer.periodic(const Duration(milliseconds: 1500), (timer) {
+    Timer.periodic(const Duration(milliseconds: 1550), (timer) {
       counter += 1;
       setState(() {});
     });
@@ -80,6 +80,7 @@ class _TranscribeState extends State<Transcribe> {
 
       if (widget.isActive && !widget.isListening && speechWasEnabled) {
         Globals.bluetooth.write("s$words");
+
         Timer(const Duration(seconds: 3), () {
           widget.changeMode("s");
         });
@@ -150,15 +151,8 @@ class _TranscribeState extends State<Transcribe> {
 
   void turnOnSpeech(bool macro) {
     if (!isConnected) {
-      Fluttertoast.showToast(
-        msg: "You must connect to your glasses to use this feature.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16,
-      );
+      Utility.showToast(
+          "You must connect to your glasses to use this feature.");
       return;
     }
 

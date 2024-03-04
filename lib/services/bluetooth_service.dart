@@ -1,10 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:vision_one/utils/utility.dart';
 
 abstract class _BluetoothService {
   Future<bool> connectTo(String address);
@@ -28,15 +27,7 @@ class BluetoothService implements _BluetoothService {
         return devices;
       }
     } on PlatformException {
-      Fluttertoast.showToast(
-        msg: "PlatformException",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16,
-      );
+      Utility.showToast("PlatformException");
     }
 
     return [];
@@ -68,15 +59,7 @@ class BluetoothService implements _BluetoothService {
     var isBluetoothEnabled = await flutterBluetoothSerial.isEnabled ?? false;
 
     if (!isBluetoothEnabled) {
-      Fluttertoast.showToast(
-        msg: "Bluetooth is not enabled",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16,
-      );
+      Utility.showToast("Bluetooth is not enabled 🔷");
 
       return false;
     }
@@ -85,15 +68,7 @@ class BluetoothService implements _BluetoothService {
       bluetoothConnection = await BluetoothConnection.toAddress(address);
       return bluetoothConnection.isConnected;
     } catch (e) {
-      Fluttertoast.showToast(
-        msg: "Connection error due: $e",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16,
-      );
+      Utility.showToast("Connection error due: $e");
 
       return false;
     }
@@ -110,26 +85,10 @@ class BluetoothService implements _BluetoothService {
       try {
         bluetoothConnection.output.add(utf8.encode(message));
       } catch (e) {
-        Fluttertoast.showToast(
-          msg: "Error during write: $e",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black,
-          textColor: Colors.white,
-          fontSize: 16,
-        );
+        Utility.showToast("Error during write: $e");
       }
     } else {
-      Fluttertoast.showToast(
-        msg: "Connection is not established",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.black,
-        textColor: Colors.white,
-        fontSize: 16,
-      );
+      print("Connection is not established");
     }
   }
 

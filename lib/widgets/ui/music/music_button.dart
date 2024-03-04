@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:vision_one/global/globals.dart';
+import 'package:vision_one/utils/utility.dart';
 
 class MusicButton extends StatefulWidget {
   const MusicButton({
@@ -41,15 +41,8 @@ class _MusicButtonState extends State<MusicButton> {
       child: InkWell(
         onTap: () {
           if (!isConnected) {
-            Fluttertoast.showToast(
-              msg: "You must connect to your glasses to use this feature.",
-              toastLength: Toast.LENGTH_SHORT,
-              gravity: ToastGravity.CENTER,
-              timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
-              fontSize: 16,
-            );
+            Utility.showToast(
+                "You must connect to your glasses to use this feature.");
             return;
           }
 

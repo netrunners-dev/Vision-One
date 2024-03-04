@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -85,10 +84,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
       String macro = (localStorage.getString("macro") ?? "a");
 
       if (isBTConnected) {
-        Globals.bluetooth.write("x$macro$time");
-        Utility.showToast("Successfully changed settings ⚙️");
-        return;
+        Globals.bluetooth.disconnect();
       }
+      await Future.delayed(const Duration(seconds: 1));
 
       Globals.bluetooth.connectTo(_macAddressController.text);
       await Future.delayed(const Duration(seconds: 3));
@@ -97,7 +95,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         Globals.bluetooth.write("x$macro$time");
         isBTConnected = true;
         setState(() {});
-        Utility.showToast("Successfully connected ⚡");
+        Utility.showToast("Success ⚡");
       }
     } else {
       if (Globals.bluetooth.bluetoothConnection.isConnected) {

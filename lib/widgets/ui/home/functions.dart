@@ -61,13 +61,13 @@ class _FuncitonsState extends State<Funcitons> {
           message += dataStr;
           if (dataStr.contains('\n')) {
             String trimmedMessage = message.trim();
-            if (trimmedMessage == "a" && !wasSent) {
+            if (trimmedMessage.characters.contains('a') && wasSent == false) {
               onModeChange("a");
               setIsMacroClicked(false);
               setWasSent(true);
             }
 
-            if (trimmedMessage == "s" && !wasSent) {
+            if (trimmedMessage == "s" && wasSent == false) {
               onModeChange("s");
               setIsMacroClicked(false);
               setWasSent(true);
@@ -81,7 +81,7 @@ class _FuncitonsState extends State<Funcitons> {
           }
         });
       } catch (e) {
-        print(e);
+        print(e.toString());
       }
     }
   }
@@ -109,12 +109,12 @@ class _FuncitonsState extends State<Funcitons> {
 
   void clockMode() {
     Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (!areAllModesDisabled) return;
+      if (areAllModesDisabled) {
+        DateTime now = DateTime.now();
+        String time = DateFormat('kk:mm').format(now);
 
-      DateTime now = DateTime.now();
-      String time = DateFormat('kk:mm').format(now);
-
-      Globals.bluetooth.write("c$time");
+        Globals.bluetooth.write("c$time");
+      }
     });
   }
 

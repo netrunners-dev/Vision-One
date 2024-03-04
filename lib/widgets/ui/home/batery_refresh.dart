@@ -43,7 +43,7 @@ class _BatteryResetState extends State<BatteryReset> {
         }
       });
     } catch (e) {
-      print(e);
+      print(e.toString());
     }
   }
 

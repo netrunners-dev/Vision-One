@@ -49,8 +49,6 @@ class _MusicMacroState extends State<MusicMacro> {
       initialData: NowPlayingTrack.loading,
       value: NowPlaying.instance.stream,
       child: Consumer<NowPlayingTrack>(builder: (context, track, _) {
-        // if (track == NowPlayingTrack.loading) return Container();
-
         if (counter > prevCounter && widget.isActive) {
           if (track.isStopped) {
             return MusicButton(
