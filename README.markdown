@@ -1,11 +1,11 @@
-<h1 align="center">Web-Check</h1>
+<h1 align="center">Vision One</h1>
 
 <p align="center">
 <img src="https://i.imgur.com/wsfT3lK.png" width="150"/>
 <br/>
 <b>A gadget that makes any pair of glasses into smart ones</b>
 <br />
-🌐 <a href="https://vision-one.netrunner.work/">vision-one.netrunner.work</a></b>
+🌐 <a href="https://vision-one.netrunners.work/">vision-one.netrunners.work</a></b>
 </p>
 
 
