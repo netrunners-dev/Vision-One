@@ -11,7 +11,14 @@
 
 ## 📋 Table of Contents
 
-- **[About](#about)**
+- **[About](#❓-about)**
+- **[Features](#🔋-features)**
+- **[How to build](#🏗️-how-to-build)**
+  - [Hardware](#hardware)
+    - [Thing you will need](#thing-you-will-need)
+    - [3D Printing](#3d-printing)
+    - [Schema](#schema)
+  - [Software](#software)
 
 ## ❓ About
 
@@ -27,7 +34,7 @@ Some of the features Vision One provides are:
 - **AI Mode**: Wikipedia at your fingertips
 - **Music Mode**: Media player in your glasses
 
-## 🏗️ How To Build
+## 🏗️ How to build
 ### Hardware
 
 #### Thing you will need:
