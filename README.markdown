@@ -19,6 +19,7 @@
     - [3D Printing](#3d-printing)
     - [Schema](#schema)
   - [Software](#software)
+- **[Usage](#📝-usage)**
 
 ## ❓ About
 
@@ -62,5 +63,39 @@ While the case is being printed, we can start connecting the components based on
 
 Once the components are soldered together, put them all in the 3D printed case.
 
-
 ### Software
+
+To build application, you need to have [Flutter](https://docs.flutter.dev/get-started/install) and [Git](https://git-scm.com/) installed on your machine. After installing tools follow these steps:
+
+1. **Clone the repository**
+    ```shell
+    git clone https://github.com/netrunners-dev/Vision-One.git
+    ```
+  
+2. **Navigate to the project directory:**
+    ```shell
+    cd Vision-One
+    ```
+
+3. **Install dependencies**
+   ```shell
+    flutter pub get
+    ```
+
+4. **Create and populate .env template**
+   ```shell
+    OPEN_AI_API_KEY=""
+    ```
+    > File **must** be created in lib folder. You can obtain OpenAI Key [here](https://openai.com/).
+
+5. **Build application**
+   ```shell
+    flutter build apk
+    ```
+    > You should get something like this 
+    ```✓  Built build\app\outputs\flutter-apk\app-release.apk (23.2MB).```
+
+6. **Transfer .apk file to phone and enjoy 🥳**
+
+
+## 📝 Usage
