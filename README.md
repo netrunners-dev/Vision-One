@@ -119,9 +119,8 @@ To build application, you need to have [Arduino IDE](https://www.arduino.cc/en/s
 1. **Open Vision One Application**
 
 2. **Agree to all permissions**
-   
-    <img src="https://imgur.com/riFH33P.gif" height="500px"/>
 
+   ![GIF - How to enable permissions](https://i.imgur.com/UANweEr.gif)
 
 3. **Find MAC Address of your HC-06**
    > [This](https://medium.com/@mohamadamgad09/how-to-get-hc-05-hc-06-mac-address-16ed54bf390) can help you.
@@ -130,7 +129,8 @@ To build application, you need to have [Arduino IDE](https://www.arduino.cc/en/s
    
    Enter your MAC address in settings and choose macro mode.
    After configuration press apply and wait for connection.
-   <img src="https://imgur.com/KAmRQhQ.gif" height="500px"/>
+   
+   ![GIF - How to connect to gadget](https://imgur.com/XQKotli.gif)
 
 
 ## 📝 Usage
