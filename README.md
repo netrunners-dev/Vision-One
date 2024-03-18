@@ -26,62 +26,81 @@
 
 ## ❓ About
 
-Vision One is a gadget that transforms any glasses into a smart device. This clip-on attachment seamlessly integrates with your existing lenses, adding a layer of intelligent functionality without affecting your current eyewear.
+Vision One is a gadget that transforms any glasses into a smart device. This attachment seamlessly integrates with your existing glasses, adding a layer of intelligent functionality without affecting your current eyewear!
 
 ![Vision One Gadget](https://i.imgur.com/exA8xss.png)
 
 ## 🔋 Features
 
-Some of the features Vision One provides are:
+Some of the features that the Vision One provides are:
 
-- **Real-time Transcription**: From now on, even the deaf can hear
-- **AI Mode**: Wikipedia at your fingertips
-- **Music Mode**: Media player in your glasses
+- **Real-time Speech To Text**: From now on, even the deaf can hear
+- **AI Mode**: ChatGPT at your fingertips
+- **Music Mode**: Media player inside your glasses
 
 ## 🏗️ How to build
 ### Hardware
 
-#### Thing you will need:
+#### Things you will need:
 - Arduino Pro Micro
-- HC-06
+- HC-05/06
 - ST7735 TFT LCD 0.96" SPI 80x160px
 - Charging module
-- Li-Ion battery 3.7v 650mAh
+- Li-Ion battery 3.7v 650mAh 
 - Push button
 - Slide switch
 - 10kΩ Resistor
-- Jumper Cables
+- DuPont Wires
 - Soldering Iron
 - 3D Printer
-- Paint (optional)
+- Paint (optional, in case you want to paint it after printing)
 
 #### 3D Printing
-Before we connect all the components, we will put the case to print.
-(coming soon).
+##### Print settings
+- Layer height: 0.08mm-0.10mm
+- Brim: On
+- Supports: Custom preferably (only needed for the main case, for side holes & the slit for the glasses, NOT the letters)
+- Material: PLA
+- Hotend Temps: 210c first layer, 205c other layers
+- Bed Temps: 60c
+- Infill: Doesn't matter
+
+##### Files
+3D Printing Files are available [here.](https://github.com/netrunners-dev/Vision-One/releases)
+
+⚠️ **When printing the "Clip", you should split it into two separate pieces (cut it in half in your preferred slicer) and then glue it together - Why? It's not the easiest model to print and we've had some issues with supports not being easy to remove, causing further issues during the assembly.**
 
 #### Schema
-While the case is being printed, we can start connecting the components based on this schema.
+While the case is being printed, we can start connecting the components based on this schema. 
+
+⚠️ **The battery checking part of the circuit is not present on the schema due to it not being the most accurate thing out there. Pin 2 is the pin used to check the battery level. You'll need to create a simple voltage divider for this. For this part, you're completely on your own. Sorry!**
 
 ![Schema for connecting all components](https://imgur.com/TYIjHpO.png)
 
-Once the components are soldered together, before putting them all in the case do this [first](#setup-arduino).
+Once the components are all connected, before putting them all in the case, [set up the Arduino](#setup-arduino).
 
 ### Software
 
-To build application, you need to have [Arduino IDE](https://www.arduino.cc/en/software), [Flutter](https://docs.flutter.dev/get-started/install) and [Git](https://git-scm.com/) installed on your machine. After installing tools follow these steps:
+To build the application, the following software must be installed on your computer:
+
+- [Arduino IDE](https://www.arduino.cc/en/software)
+- [Flutter](https://docs.flutter.dev/get-started/install)
+- [Git](https://git-scm.com/)
+
+After installing the required tools, follow these steps:
 
 
 #### Setup Arduino
 
 1. **Get .ino file**
 
-    Head to the GitHub releases and grab the ```.ino``` file.
+    Head to the [GitHub releases](https://github.com/netrunners-dev/Vision-One/releases) and grab the ```.ino``` file.
 
 2. **Flash Arduino**
 
     Launch the Arduino IDE and open the downloaded .ino file. Connect your Arduino to your computer using a USB cable and upload the code to the Arduino board.
 
-#### Build application
+#### Build the application
 
 1. **Clone the repository**
     ```shell
@@ -98,13 +117,13 @@ To build application, you need to have [Arduino IDE](https://www.arduino.cc/en/s
     flutter pub get
     ```
 
-4. **Create and populate .env template**
+4. **Create and populate the .env template**
    ```shell
     OPEN_AI_API_KEY=""
     ```
     > File **must** be created in lib folder. You can obtain OpenAI Key [here](https://openai.com/).
 
-5. **Build application**
+5. **Build the application**
    ```shell
     flutter build apk
     ```
@@ -116,19 +135,19 @@ To build application, you need to have [Arduino IDE](https://www.arduino.cc/en/s
 
 ## ⚙️ Configuration
 
-1. **Open Vision One Application**
+1. **Open the Vision One Application**
 
-2. **Agree to all permissions**
+2. **Give the app required permissions**
 
    ![GIF - How to enable permissions](https://i.imgur.com/UANweEr.gif)
 
-3. **Find MAC Address of your HC-06**
+3. **Find the MAC Address of your HC-06**
    > [This](https://medium.com/@mohamadamgad09/how-to-get-hc-05-hc-06-mac-address-16ed54bf390) can help you.
 
-4. **Connecting to gadget**
+4. **Connecting to the gadget**
    
-   Enter your MAC address in settings and choose macro mode.
-   After configuration press apply and wait for connection.
+   Enter your MAC address in settings and choose the macro mode.
+   After configuring your settings, press apply and wait for it to connect.
    
    ![GIF - How to connect to gadget](https://imgur.com/XQKotli.gif)
 
@@ -145,19 +164,19 @@ To build application, you need to have [Arduino IDE](https://www.arduino.cc/en/s
 
 3. **Activate Speech-To-Text mode**
 
-    Tap the speech-to-text button. A "boop" sound will indicate when you can begin speaking. Your speech will be displayed on the screen, with a slight delay of one second. Another "boop" sound will signal the end of speech recognition.
+    Tap the speech-to-text button. A "bleep"-like sound will indicate when you can begin speaking. Text will be displayed on the screen, with a slight delay, displaying what the other party is saying. Another "boop" sound will signal the end of speech recognition.
 
 4. **Activate AI mode**
 
-    Tap the AI button. A "boop" will let you know it's ready for your question. Once you ask your question, another "boop" will sound, followed by the answer displayed on the screen.
+    Tap the AI button. A "bleep" will let you know when it's ready for your question. Once you ask your question, you will hear another "bleep", followed by the answer getting displayed on the screen.
 
 5. **Refresh Battery Level**
 
-    Tapping the battery refresh button in the app will update the battery percentage in real-time.
+    Tapping the battery refresh button in the app will update the battery percentage.
 
 ## Contact
 
-If you have any questions, suggestions, or feature requests, please feel free to reach out to us trough [Mail](mailto:contact@netrunners.work).
+If you have any questions, suggestions, or feature requests, please feel free to reach out to us trough our [e-mail](mailto:contact@netrunners.work)!
 
 ## Credits
 
