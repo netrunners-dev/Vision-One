@@ -3,7 +3,7 @@
 <p align="center">
 <img src="https://i.imgur.com/wsfT3lK.png" width="150"/>
 <br/>
-<b>A gadget that makes any pair of glasses into smart ones</b>
+<b>A gadget that turns any pair of glasses into smart ones</b>
 <br />
 🌐 <a href="https://vision-one.netrunners.work/">vision-one.netrunners.work</a></b>
 </p>
