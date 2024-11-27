@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:vision_one/global/globals.dart';
-import 'package:vision_one/utils/utility.dart';
+import 'package:vision_one_4o/global/globals.dart';
+import 'package:vision_one_4o/utils/utility.dart';
 
 class MusicButton extends StatefulWidget {
   const MusicButton({

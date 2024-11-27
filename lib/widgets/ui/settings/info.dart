@@ -36,7 +36,7 @@ class SoftwareInfo extends StatelessWidget {
                 ),
                 alignment: Alignment.center,
                 child: const Text(
-                  "0.1A",
+                  "0.2A",
                   style: TextStyle(fontSize: 22),
                 ),
               ),

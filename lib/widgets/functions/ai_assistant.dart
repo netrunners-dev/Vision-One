@@ -4,9 +4,9 @@ import 'package:dart_openai/dart_openai.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
-import 'package:vision_one/global/globals.dart';
-import 'package:vision_one/providers/speech_to_text_provider.dart';
-import 'package:vision_one/utils/utility.dart';
+import 'package:vision_one_4o/global/globals.dart';
+import 'package:vision_one_4o/providers/speech_to_text_provider.dart';
+import 'package:vision_one_4o/utils/utility.dart';
 
 class AIAssistant extends StatefulWidget {
   const AIAssistant({
@@ -60,7 +60,7 @@ class _AIAssistantState extends State<AIAssistant> {
 
     OpenAIChatCompletionModel chatCompletion =
         await OpenAI.instance.chat.create(
-      model: "gpt-3.5-turbo-1106",
+      model: "gpt-4o-mini",
       seed: 6,
       messages: [userMessage],
       temperature: 0.2,
@@ -73,7 +73,7 @@ class _AIAssistantState extends State<AIAssistant> {
       return Globals.bluetooth.write("at$response");
     }
 
-    Globals.bluetooth.write("No response 😢");
+    Globals.bluetooth.write("No response.");
   }
 
   @override

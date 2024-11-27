@@ -3,12 +3,12 @@ import 'package:flutter/services.dart';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:provider/provider.dart';
-import 'package:vision_one/global/globals.dart';
-import 'package:vision_one/providers/speech_to_text_provider.dart';
+import 'package:vision_one_4o/global/globals.dart';
+import 'package:vision_one_4o/providers/speech_to_text_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dart_openai/dart_openai.dart';
 
-import 'package:vision_one/screen/tabs.dart';
+import 'package:vision_one_4o/screen/tabs.dart';
 
 late bool isEnabled;
 

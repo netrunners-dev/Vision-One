@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:vision_one/utils/utility.dart';
+import 'package:vision_one_4o/utils/utility.dart';
 
 abstract class _BluetoothService {
   Future<bool> connectTo(String address);

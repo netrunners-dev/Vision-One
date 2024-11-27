@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:vision_one/screen/home.dart';
-import 'package:vision_one/screen/settings.dart';
-import 'package:vision_one/screen/creators.dart';
-import 'package:vision_one/widgets/ui/nav.dart';
+import 'package:vision_one_4o/screen/home.dart';
+import 'package:vision_one_4o/screen/settings.dart';
+import 'package:vision_one_4o/screen/creators.dart';
+import 'package:vision_one_4o/widgets/ui/nav.dart';
 
 class TabsScreen extends StatefulWidget {
   const TabsScreen({super.key});

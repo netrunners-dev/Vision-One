@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:vision_one/services/bluetooth_service.dart';
+import 'package:vision_one_4o/services/bluetooth_service.dart';
 
 class Globals {
   static BluetoothService bluetooth = BluetoothService();

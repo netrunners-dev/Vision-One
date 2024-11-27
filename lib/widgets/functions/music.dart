@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vision_one/global/globals.dart';
+import 'package:vision_one_4o/global/globals.dart';
 import 'package:nowplaying/nowplaying.dart';
-import 'package:vision_one/widgets/ui/music/music_button.dart';
+import 'package:vision_one_4o/widgets/ui/music/music_button.dart';
 
 class MusicMacro extends StatefulWidget {
   const MusicMacro({

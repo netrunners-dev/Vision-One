@@ -4,11 +4,11 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vision_one/global/globals.dart';
-import 'package:vision_one/providers/speech_to_text_provider.dart';
-import 'package:vision_one/widgets/functions/ai_assistant.dart';
-import 'package:vision_one/widgets/functions/music.dart';
-import 'package:vision_one/widgets/functions/speech_to_text.dart';
+import 'package:vision_one_4o/global/globals.dart';
+import 'package:vision_one_4o/providers/speech_to_text_provider.dart';
+import 'package:vision_one_4o/widgets/functions/ai_assistant.dart';
+import 'package:vision_one_4o/widgets/functions/music.dart';
+import 'package:vision_one_4o/widgets/functions/speech_to_text.dart';
 import 'package:intl/intl.dart';
 
 class Funcitons extends StatefulWidget {

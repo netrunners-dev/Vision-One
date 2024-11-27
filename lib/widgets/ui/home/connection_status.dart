@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vision_one/global/globals.dart';
+import 'package:vision_one_4o/global/globals.dart';
 
 class ConnectionStatus extends StatefulWidget {
   const ConnectionStatus({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:vision_one/widgets/ui/home/batery_refresh.dart';
-import 'package:vision_one/widgets/ui/home/battery_percentage.dart';
-import 'package:vision_one/widgets/ui/home/connection_status.dart';
+import 'package:vision_one_4o/widgets/ui/home/batery_refresh.dart';
+import 'package:vision_one_4o/widgets/ui/home/battery_percentage.dart';
+import 'package:vision_one_4o/widgets/ui/home/connection_status.dart';
 
 class BottomPanel extends StatefulWidget {
   const BottomPanel(

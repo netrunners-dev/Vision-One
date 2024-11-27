@@ -4,11 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:vision_one/global/globals.dart';
-import 'package:vision_one/utils/utility.dart';
-import 'package:vision_one/widgets/ui/settings/info.dart';
-import 'package:vision_one/widgets/ui/settings/mac_connect.dart';
-import 'package:vision_one/widgets/ui/settings/macro.dart';
+import 'package:vision_one_4o/global/globals.dart';
+import 'package:vision_one_4o/utils/utility.dart';
+import 'package:vision_one_4o/widgets/ui/settings/info.dart';
+import 'package:vision_one_4o/widgets/ui/settings/mac_connect.dart';
+import 'package:vision_one_4o/widgets/ui/settings/macro.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});

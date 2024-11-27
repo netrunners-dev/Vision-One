@@ -84,11 +84,12 @@ Once the components are all connected, before putting them all in the case, [set
 To build the application, the following software must be installed on your computer:
 
 - [Arduino IDE](https://www.arduino.cc/en/software)
-- [Flutter](https://docs.flutter.dev/get-started/install)
+- [Flutter (3.16.5)](https://docs.flutter.dev/release/archive)
+- [Java SE 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+- [Android Studio](https://developer.android.com/studio)
 - [Git](https://git-scm.com/)
 
 After installing the required tools, follow these steps:
-
 
 #### Setup Arduino
 
@@ -121,7 +122,7 @@ After installing the required tools, follow these steps:
    ```shell
     OPEN_AI_API_KEY=""
     ```
-    > File **must** be created in lib folder. You can obtain OpenAI Key [here](https://openai.com/).
+    > File **must** be created inside the lib folder. You can obtain your OpenAI Key [here](https://openai.com/).
 
 5. **Build the application**
    ```shell
@@ -130,12 +131,12 @@ After installing the required tools, follow these steps:
     > You should get something like this 
     ```✓  Built build\app\outputs\flutter-apk\app-release.apk (23.2MB).```
 
-6. **Transfer .apk file to phone and install it**
+6. **Transfer the .apk file to your phone and install it**
 
 
 ## ⚙️ Configuration
 
-1. **Open the Vision One Application**
+1. **Open the Vision One application**
 
 2. **Give the app required permissions**
 
@@ -144,7 +145,7 @@ After installing the required tools, follow these steps:
 3. **Find the MAC Address of your HC-06**
    > [This](https://medium.com/@mohamadamgad09/how-to-get-hc-05-hc-06-mac-address-16ed54bf390) can help you.
 
-4. **Connecting to the gadget**
+4. **Connect to the gadget**
    
    Enter your MAC address in settings and choose the macro mode.
    After configuring your settings, press apply and wait for it to connect.

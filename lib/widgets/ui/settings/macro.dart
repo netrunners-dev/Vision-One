@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vision_one/widgets/ui/settings/radio_buttons.dart';
+import 'package:vision_one_4o/widgets/ui/settings/radio_buttons.dart';
 
 class MacroSettings extends StatefulWidget {
   const MacroSettings(

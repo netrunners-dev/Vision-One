@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:vision_one/global/globals.dart';
+import 'package:vision_one_4o/global/globals.dart';
 
 class BatteryReset extends StatefulWidget {
   const BatteryReset({
